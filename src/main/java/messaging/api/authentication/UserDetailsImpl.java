@@ -14,18 +14,14 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDetailsImpl implements ExtendedUserDetails {
-
     private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<CustomGrantedAuthority> list = new ArrayList<>();
-
-        for(Role i : user.getRoles()) {
-            list.add(new CustomGrantedAuthority(i.getName()));
-        }
-
-        return list;
+         return user.getRoles()
+                .stream()
+                .map(role -> new CustomGrantedAuthority(role.getName()))
+                .toList();
     }
     @Override
     public Long getId() {
@@ -61,5 +57,4 @@ public class UserDetailsImpl implements ExtendedUserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
