@@ -1,13 +1,10 @@
 package messaging.api.authentication;
 
-import messaging.api.user.entity.Role;
 import messaging.api.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
