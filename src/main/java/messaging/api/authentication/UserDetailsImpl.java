@@ -49,7 +49,7 @@ public class UserDetailsImpl implements ExtendedUserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !getUser().isBanned();
     }
 
     @Override

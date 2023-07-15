@@ -8,14 +8,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Role {
+public class Role implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8997690331725029733L;
+
     @Id
     @GeneratedValue
     private Long id;
@@ -26,5 +31,5 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> userEntities;
+    private List<User> userEntities;
 }

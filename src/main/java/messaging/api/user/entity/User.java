@@ -7,8 +7,11 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +20,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 4141717765406401594L;
+
     @Id
     @GeneratedValue
     private long id;
