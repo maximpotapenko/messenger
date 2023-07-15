@@ -1,6 +1,5 @@
 package messaging.api.authentication.service;
 
-import messaging.api.authentication.ExtendedUserDetails;
 import messaging.api.authentication.UserDetailsImpl;
 import messaging.api.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
