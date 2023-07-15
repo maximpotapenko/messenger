@@ -17,10 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.*;
 
 class SimpleUserServiceTest {
-
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -50,14 +49,13 @@ class SimpleUserServiceTest {
 
             String username = "user_1";
 
-            //when
-            when(userMapper.toEntity(dto)).thenReturn(User
+            given(userMapper.toEntity(dto)).willReturn(User
                     .builder()
                     .username(username)
                     .build());
-            when(userRepository.existsUserEntityByUsername(username)).thenReturn(false);
+            given(userRepository.existsUserEntityByUsername(username)).willReturn(false);
 
-            //then
+            //when //then
             assertDoesNotThrow(() -> userService.createUser(dto));
         }
 
@@ -68,14 +66,13 @@ class SimpleUserServiceTest {
 
             String username = "user_1";
 
-            //when
-            when(userMapper.toEntity(dto)).thenReturn(User
+            given(userMapper.toEntity(dto)).willReturn(User
                     .builder()
                     .username(username)
                     .build());
-            when(userRepository.existsUserEntityByUsername(username)).thenReturn(true);
+            given(userRepository.existsUserEntityByUsername(username)).willReturn(true);
 
-            //then
+            //when //then
             assertThrows(RuntimeException.class, () -> userService.createUser(dto));
         }
     }
@@ -94,11 +91,10 @@ class SimpleUserServiceTest {
 
                 String newPassword = "5321";
 
-            //when
-                when(userRepository.findById(id)).thenReturn(Optional.ofNullable(user));
-                when(passwordEncoder.matches(oldPassword, user.getPassword())).thenReturn(false);
+                given(userRepository.findById(id)).willReturn(Optional.ofNullable(user));
+                given(passwordEncoder.matches(oldPassword, user.getPassword())).willReturn(false);
 
-            //then
+            //when //then
                 assertThrows(RuntimeException.class, () -> userService.changePassword(id, oldPassword, newPassword));
         }
 
@@ -113,11 +109,10 @@ class SimpleUserServiceTest {
 
             String newPassword = "5321";
 
-            //when
-            when(userRepository.findById(id)).thenReturn(Optional.ofNullable(user));
-            when(passwordEncoder.matches(oldPassword, user.getPassword())).thenReturn(true);
+            given(userRepository.findById(id)).willReturn(Optional.ofNullable(user));
+            given(passwordEncoder.matches(oldPassword, user.getPassword())).willReturn(true);
 
-            //then
+            //when //then
             assertDoesNotThrow(() -> userService.changePassword(id, oldPassword, newPassword));
         }
     }
