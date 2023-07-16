@@ -99,6 +99,8 @@ public class SimpleUserService implements UserService {
         user.setPassword(newPassword);
 
         userRepository.saveAndFlush(user);
+
+        log.info("{} username changed from " + oldPassword + " to " + newPassword, user);
     }
 
     /**
@@ -113,10 +115,13 @@ public class SimpleUserService implements UserService {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(userId));
+        String oldUsername = user.getUsername();
 
         user.setUsername(newUsername);
 
         userRepository.saveAndFlush(user);
+
+        log.info("{} username changed from " + oldUsername + " to " + user.getUsername(), user);
     }
 
     /**
@@ -183,6 +188,8 @@ public class SimpleUserService implements UserService {
         user.setDeleted(true);
 
         userRepository.saveAndFlush(user);
+
+        log.info("{} has been marked as deleted", user);
     }
 
     @Override
@@ -194,6 +201,8 @@ public class SimpleUserService implements UserService {
         user.setDeleted(false);
 
         userRepository.saveAndFlush(user);
+
+        log.info("{} has been marked as NOT deleted", user);
     }
 
     /**
@@ -208,6 +217,8 @@ public class SimpleUserService implements UserService {
         user.setBanned(true);
 
         userRepository.saveAndFlush(user);
+
+        log.info("Banned {}", user);
     }
 
     /**
@@ -222,5 +233,7 @@ public class SimpleUserService implements UserService {
         user.setBanned(false);
 
         userRepository.saveAndFlush(user);
+
+        log.info("Unbanned {}", user);
     }
 }
