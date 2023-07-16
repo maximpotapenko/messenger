@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfileResponseDto>> findUsersByUsername(@RequestParam String q, @RequestParam int offset, @RequestParam int limit) {
-        List<ProfileResponseDto> list = userService.findUsersByUsername(q, offset, limit);
+    public ResponseEntity<List<ProfileResponseDto>> findUsersByUsername(@RequestParam String username, @RequestParam int offset, @RequestParam int limit) {
+        List<ProfileResponseDto> list = userService.findUsersByUsername(username, offset, limit);
 
         return new ResponseEntity<>(list, HttpStatusCode.valueOf(200));
     }
@@ -54,11 +55,13 @@ public class UserController {
     }
 
     @PostMapping("/{id}/roles/")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void addRole(@PathVariable Long id, @RequestParam String name) {
         userService.addRole(id, name);
     }
 
     @DeleteMapping("/{id}/roles/")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteRole(@PathVariable Long id, @RequestParam String name) {
         userService.removeRole(id, name);
     }
@@ -69,23 +72,25 @@ public class UserController {
     }
 
     @PutMapping("/{id}/ban")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void banUser(@PathVariable Long id) {
         userService.banUser(id);
     }
 
     @PutMapping("/{id}/unban")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void unbanUser(@PathVariable Long id) {
         userService.unbanUser(id);
     }
 
     @PutMapping("/restore-account")
-    public void restoreUser(@AuthenticationPrincipal ExtendedUserDetails userDetails) {
+    public void restoreAccount(@AuthenticationPrincipal ExtendedUserDetails userDetails) {
         userService.restoreUser(userDetails.getId());
 
     }
 
     @DeleteMapping("/delete-account")
-    public void deleteUser(@AuthenticationPrincipal ExtendedUserDetails userDetails) {
+    public void deleteAccount(@AuthenticationPrincipal ExtendedUserDetails userDetails) {
         userService.deleteUser(userDetails.getId());
     }
 }

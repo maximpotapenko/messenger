@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("v1/messages/")
 public class DirectMessageController {
-
     private final DirectMessageService directMessageService;
 
     @GetMapping("/{messageId}")

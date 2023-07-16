@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("v1/roles")
 public class RoleController {
-
     private final RoleService roleService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoleResponseDto> createRole(@RequestBody RoleRequestDto dto) {
         log.info("Received request to create new role {}", dto);
 
@@ -31,6 +32,7 @@ public class RoleController {
     }
 
     @GetMapping("/{name}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoleResponseDto> findRoleByName(@PathVariable String name) {
         RoleResponseDto payload = roleService.findRoleByName(name);
 
@@ -38,6 +40,7 @@ public class RoleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<RoleResponseDto>> findAllRoles() {
         List<RoleResponseDto> payload = roleService.findAllRoles();
 
@@ -45,10 +48,10 @@ public class RoleController {
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteRoleByName(@RequestParam String name) {
         log.info("Received request to delete role " + name);
 
         roleService.deleteRoleByName(name);
     }
-
 }
