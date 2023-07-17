@@ -21,6 +21,8 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     private final DirectMessageMapper directMessageMapper;
 
+    private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Message doesn't exist";
+
     @Override
     public void createMessage(DirectMessageRequestDto dto) {
         DirectMessage message = directMessageMapper.toEntity(dto);
@@ -32,7 +34,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
     public DirectMessageResponseDto findDirectMessage(Long id) {
         return directMessageRepository.findById(id)
                 .map(directMessageMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Message doesn't exist"));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE));
     }
 
     @Override
@@ -45,7 +47,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     @Override
     public void updateMessage(Long id, String value) {
-        DirectMessage directMessage = directMessageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Message doesn't exist"));
+        DirectMessage directMessage = directMessageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE));
 
         directMessage.setMessage(value);
 
@@ -54,7 +56,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     @Override
     public void deleteMessage(Long id) {
-        if(!directMessageRepository.existsById(id)) throw new ResourceNotFoundException("Message doesn't exist");
+        if(!directMessageRepository.existsById(id)) throw new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE);
 
         directMessageRepository.deleteById(id);
     }

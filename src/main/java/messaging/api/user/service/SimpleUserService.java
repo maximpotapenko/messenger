@@ -9,6 +9,7 @@ import messaging.api.user.dto.UpdateUserRequestDto;
 import messaging.api.user.repository.UserRepository;
 import messaging.api.user.service.interfaces.RoleService;
 import messaging.api.user.service.interfaces.UserService;
+import messaging.api.util.exception.ResourceAlreadyExistsException;
 import messaging.api.util.exception.ResourceNotFoundException;
 import messaging.api.util.exception.UsernameAlreadyExistsException;
 import messaging.api.util.exception.WrongPasswordException;
@@ -24,7 +25,6 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class SimpleUserService implements UserService {
-
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -33,9 +33,6 @@ public class SimpleUserService implements UserService {
 
     private final UserMapper userMapper;
 
-    /**
-     * @throws UsernameAlreadyExistsException
-     */
     @Override
     public void createUser(RegistrationRequestDto registrationRequestDto) {
         User user = userMapper.toEntity(registrationRequestDto);
@@ -48,9 +45,6 @@ public class SimpleUserService implements UserService {
         log.info("{} added to the database", user);
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public ProfileResponseDto findUser(Long id) {
         return userRepository
@@ -59,9 +53,6 @@ public class SimpleUserService implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public ProfileResponseDto findUser(String username) {
         return userRepository
@@ -85,9 +76,6 @@ public class SimpleUserService implements UserService {
         return usersDto;
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public void changePassword(Long userId, String oldPassword, String newPassword) {
         User user = userRepository
@@ -103,10 +91,6 @@ public class SimpleUserService implements UserService {
         log.info("{} username changed from " + oldPassword + " to " + newPassword, user);
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     * @throws UsernameAlreadyExistsException
-     */
     @Override
     public void changeUsername(Long userId, String newUsername){
         if(userRepository.existsUserEntityByUsername(newUsername))
@@ -124,9 +108,6 @@ public class SimpleUserService implements UserService {
         log.info("{} username changed from " + oldUsername + " to " + user.getUsername(), user);
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public void updateUser(Long userId, UpdateUserRequestDto updateUserRequestDto) {
         User user = userRepository
@@ -153,7 +134,7 @@ public class SimpleUserService implements UserService {
         List<Role> roles = user.getRoles();
 
         if(roles.contains(r))
-            throw new RuntimeException("User already has role " + r.getName());
+            throw new ResourceAlreadyExistsException("User already has role " + r.getName());
 
         roles.add(r);
 
@@ -176,9 +157,6 @@ public class SimpleUserService implements UserService {
         log.info("Removed role " + r.getName() + " from user with id: " + user.getId());
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public void deleteUser(Long id) {
         User user = userRepository
@@ -205,9 +183,6 @@ public class SimpleUserService implements UserService {
         log.info("{} has been marked as NOT deleted", user);
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public void banUser(Long id) {
         User user = userRepository
@@ -221,9 +196,6 @@ public class SimpleUserService implements UserService {
         log.info("Banned {}", user);
     }
 
-    /**
-     * @throws ResourceNotFoundException
-     */
     @Override
     public void unbanUser(Long id) {
         User user = userRepository
