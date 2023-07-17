@@ -20,7 +20,7 @@ public interface UserMapper {
     ProfileResponseDto toProfileResponseDto(User user);
 
     @Named("encoder")
-    default String encode(String rawPassword) {
-        return new BCryptPasswordEncoder().encode(rawPassword);
+    default String encoder(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 }
