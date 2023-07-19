@@ -1,16 +1,14 @@
 package messaging.api.user.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class RoleResponseDto {
-    private Long id;
+import java.util.List;
 
-    private String name;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProfileListResponseDto {
+    private List<ProfileResponseDto> list;
 }
