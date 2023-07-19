@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RegistrationRequestDto {
-
     @Pattern(regexp = "\\w+", message = "Username can contain only a-z, A-Z, 1-9 and _ characters")
     @Pattern(regexp = ".*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*", message = "Username must contain at least 4 letters")
     @Pattern(regexp = "^\\D.*", message = "Username cannot start with a digit")
