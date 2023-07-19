@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 @TestConfiguration
 public class UserTestConfig {
     @Bean
-    UserTestFactory userTestFactory() {
+    public UserTestFactory userTestFactory() {
         return new SimpleUserTestFactory();
     }
 }
