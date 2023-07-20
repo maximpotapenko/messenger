@@ -7,7 +7,6 @@ import messaging.api.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -32,7 +31,5 @@ public class DirectMessage {
     @Size(max = 500)
     private String message;
 
-    @CreationTimestamp
-    private Instant createdAt;
-
+    private Instant createdAt = Instant.now();
 }

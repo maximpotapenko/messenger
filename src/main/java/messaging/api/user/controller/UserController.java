@@ -17,8 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @AllArgsConstructor
 @Slf4j
@@ -45,15 +43,15 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatusCode.valueOf(200));
         } catch(ResourceNotFoundException e) {
             log.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatusCode.valueOf(404));
+            throw e;
         }
     }
 
     @GetMapping(FIND_USERS_BY_USERNAME)
-    public ResponseEntity<ProfileListResponseDto> findUsersByUsername(@RequestParam String username, @RequestParam int offset, @RequestParam int limit) {
-        List<ProfileResponseDto> list = userService.findUsersByUsername(username, offset, limit);
-
-        return new ResponseEntity<>(new ProfileListResponseDto(list), HttpStatusCode.valueOf(200));
+    public ProfileListResponseDto findUsersByUsername(@RequestParam String username,
+                                                      @RequestParam int offset,
+                                                      @RequestParam int limit) {
+        return userService.findUsersByUsername(username, offset, limit);
     }
 
     @PostMapping(CREATE_USER)

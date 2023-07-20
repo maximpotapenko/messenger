@@ -1,6 +1,5 @@
 package messaging.api.user.service.interfaces;
 
-
 import messaging.api.user.entity.Role;
 import messaging.api.user.dto.RoleRequestDto;
 import messaging.api.user.dto.RoleResponseDto;

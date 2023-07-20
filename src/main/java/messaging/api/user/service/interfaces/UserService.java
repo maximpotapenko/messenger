@@ -1,10 +1,9 @@
 package messaging.api.user.service.interfaces;
 
+import messaging.api.user.dto.ProfileListResponseDto;
 import messaging.api.user.dto.ProfileResponseDto;
 import messaging.api.user.dto.RegistrationRequestDto;
 import messaging.api.user.dto.UpdateUserRequestDto;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -14,7 +13,7 @@ public interface UserService {
 
     ProfileResponseDto findUser(String username);
 
-    List<ProfileResponseDto> findUsersByUsername(String username, int offset, int limit);
+    ProfileListResponseDto findUsersByUsername(String username, int offset, int limit);
 
     void changePassword(Long userId, String oldPassword, String newPassword);
 

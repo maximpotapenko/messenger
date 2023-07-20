@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @Slf4j
 @AllArgsConstructor
@@ -36,9 +34,7 @@ public class DirectMessageController {
                                                            @AuthenticationPrincipal ExtendedUserDetails ud,
                                                            @RequestParam int offset,
                                                            @RequestParam int limit) {
-        List<DirectMessageResponseDto> list = directMessageService.fetchConversation(ud.getId(), userId, offset, limit);
-        log.info(list.toString());
-        return new DirectMessageListResponseDto(list);
+        return directMessageService.fetchConversation(ud.getId(), userId, offset, limit);
     }
 
     @PostMapping(CREATE_MESSAGE)

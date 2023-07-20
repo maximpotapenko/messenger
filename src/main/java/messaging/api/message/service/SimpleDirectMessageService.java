@@ -1,5 +1,6 @@
 package messaging.api.message.service;
 
+import messaging.api.message.dto.DirectMessageListResponseDto;
 import messaging.api.message.entity.DirectMessage;
 import messaging.api.message.dto.DirectMessageRequestDto;
 import messaging.api.message.dto.DirectMessageResponseDto;
@@ -24,6 +25,8 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Message doesn't exist";
 
+    private static final String ACCESS_VIOLATION_EXCEPTION_MESSAGE = "This message does not belong to you";
+
     @Override
     public Long createMessage(Long requesterId, DirectMessageRequestDto dto) {
         DirectMessage message = directMessageMapper.toEntity(dto);
@@ -42,17 +45,20 @@ public class SimpleDirectMessageService implements DirectMessageService{
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE));
 
         if(!response.getAuthorId().equals(requesterId) && !response.getRecipientId().equals(requesterId))
-            throw new NotYourResourceException("This message does not belong to you");
+            throw new NotYourResourceException(ACCESS_VIOLATION_EXCEPTION_MESSAGE);
 
         return response;
     }
 
     @Override
-    public List<DirectMessageResponseDto> fetchConversation(Long userOne, Long userTwo, int offset, int limit) {
-        return directMessageRepository.findAllByAuthorIdOrRecipientId(userOne, userTwo, offset, limit)
+    public DirectMessageListResponseDto fetchConversation(Long userOne, Long userTwo, int offset, int limit) {
+        List<DirectMessageResponseDto> list = directMessageRepository
+                .findAllByAuthorIdOrRecipientId(userOne, userTwo, offset, limit)
                 .stream()
                 .map(directMessageMapper::toDto)
                 .toList();
+
+        return new DirectMessageListResponseDto(list);
     }
 
     @Override
@@ -61,7 +67,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE));
 
         if(directMessage.getAuthor().getId() != requesterId)
-            throw new NotYourResourceException("This message does not belong to you");
+            throw new NotYourResourceException(ACCESS_VIOLATION_EXCEPTION_MESSAGE);
 
         directMessage.setMessage(value);
 
@@ -74,7 +80,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_EXCEPTION_MESSAGE));
 
         if(directMessage.getAuthor().getId() != requesterId)
-            throw new NotYourResourceException("This message does not belong to you");
+            throw new NotYourResourceException(ACCESS_VIOLATION_EXCEPTION_MESSAGE);
 
         directMessageRepository.deleteById(messageId);
     }

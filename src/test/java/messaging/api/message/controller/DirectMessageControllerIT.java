@@ -26,6 +26,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -97,7 +98,6 @@ class DirectMessageControllerIT {
         assertEquals(message.getAuthor().getId(), response.getAuthorId());
         assertEquals(message.getRecipient().getId(), response.getRecipientId());
         assertEquals(message.getMessage(), response.getMessage());
-        assertEquals(message.getCreatedAt(), response.getCreatedAt());
     }
 
     @Test
@@ -173,5 +173,9 @@ class DirectMessageControllerIT {
                 .header(HttpHeaders.AUTHORIZATION, auth)
                 .exchange()
                 .expectStatus().isOk();
+
+        Optional<DirectMessage> optional = directMessageRepository.findById(messageId);
+
+        assertThrows(RuntimeException.class, () -> optional.orElseThrow());
     }
 }

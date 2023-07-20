@@ -1,5 +1,6 @@
 package messaging.api.user.service;
 
+import messaging.api.user.dto.ProfileListResponseDto;
 import messaging.api.user.entity.User;
 import messaging.api.user.mapper.UserMapper;
 import messaging.api.user.entity.Role;
@@ -18,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,18 +64,15 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public List<ProfileResponseDto> findUsersByUsername(String username, int offset, int limit) {
+    public ProfileListResponseDto findUsersByUsername(String username, int offset, int limit) {
         if(limit > 50) throw new IllegalArgumentException("limit cannot be greater than 50");
 
-        List<User> users = userRepository.findClosestUsersByUsernameLike(username, offset, limit);
+        List<ProfileResponseDto> list = userRepository.findClosestUsersByUsernameLike(username, offset, limit)
+                .stream()
+                .map(userMapper::toProfileResponseDto)
+                .toList();
 
-        List<ProfileResponseDto> usersDto = new ArrayList<>(users.size());
-
-        for(User i : users) {
-            usersDto.add(userMapper.toProfileResponseDto(i));
-        }
-
-        return usersDto;
+        return new ProfileListResponseDto(list);
     }
 
     @Override
@@ -84,7 +81,8 @@ public class SimpleUserService implements UserService {
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(userId));
 
-        if(!passwordEncoder.matches(oldPassword, user.getPassword())) throw new WrongPasswordException("Wrong password");
+        if(!passwordEncoder.matches(oldPassword, user.getPassword()))
+            throw new WrongPasswordException("Wrong password");
 
         user.setPassword(newPassword);
 

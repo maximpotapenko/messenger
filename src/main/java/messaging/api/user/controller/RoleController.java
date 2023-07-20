@@ -6,7 +6,6 @@ import messaging.api.user.service.interfaces.RoleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +30,8 @@ public class RoleController {
 
     @GetMapping("/{name}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<RoleResponseDto> findRoleByName(@PathVariable String name) {
-        RoleResponseDto payload = roleService.findRoleByName(name);
-
-        return new ResponseEntity<>(payload, HttpStatusCode.valueOf(200));
+    public RoleResponseDto findRoleByName(@PathVariable String name) {
+        return roleService.findRoleByName(name);
     }
 
     @GetMapping
