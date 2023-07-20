@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface DirectMessageService {
 
-    Long createMessage(DirectMessageRequestDto dto);
+    Long createMessage(Long requesterId, DirectMessageRequestDto dto);
 
-    DirectMessageResponseDto findDirectMessage(Long id);
+    DirectMessageResponseDto findDirectMessage(Long requesterId, Long messageId);
 
     List<DirectMessageResponseDto> fetchConversation(Long userOne, Long userTwo, int offset, int limit);
 
-    void updateMessage(Long id, String value);
+    void updateMessage(Long requesterId, Long messageId, String value);
 
-    void deleteMessage(Long id);
+    void deleteMessage(Long requesterId, Long messageId);
 
 }

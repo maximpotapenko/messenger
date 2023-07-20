@@ -18,9 +18,8 @@ public class SimpleDirectMessageTestFactory implements DirectMessageTestFactory 
     }
 
     @Override
-    public DirectMessageRequestDto getDirectMessageRequestDto(Long author, Long recipient) {
+    public DirectMessageRequestDto getDirectMessageRequestDto(Long recipient) {
         return DirectMessageRequestDto.builder()
-                .authorId(author)
                 .recipientId(recipient)
                 .message("blank message")
                 .build();

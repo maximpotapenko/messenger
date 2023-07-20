@@ -130,7 +130,7 @@ class DirectMessageControllerIT {
     @Test
     void createMessage() {
         //given
-        DirectMessageRequestDto request = messageFactory.getDirectMessageRequestDto(author.getId(), recipient.getId());
+        DirectMessageRequestDto request = messageFactory.getDirectMessageRequestDto(recipient.getId());
         //when //then
         webTestClient.post()
                 .uri(uriBuilder -> uriBuilder.path(DirectMessageController.CREATE_MESSAGE).build())

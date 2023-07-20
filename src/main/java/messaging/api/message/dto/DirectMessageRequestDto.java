@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DirectMessageRequestDto {
-    private Long authorId;
-
     private Long recipientId;
 
     private String message;
-
 }

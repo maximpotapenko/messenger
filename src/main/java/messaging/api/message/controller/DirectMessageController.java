@@ -27,8 +27,8 @@ public class DirectMessageController {
     public static final String DELETE_MESSAGE = BASE_REQUEST + "/{messageId}";
 
     @GetMapping(FIND_MESSAGE)
-    public DirectMessageResponseDto findMessage(@PathVariable Long messageId) {
-        return directMessageService.findDirectMessage(messageId);
+    public DirectMessageResponseDto findMessage(@PathVariable Long messageId, @AuthenticationPrincipal ExtendedUserDetails ud) {
+        return directMessageService.findDirectMessage(ud.getId(), messageId);
     }
 
     @GetMapping(FETCH_CONVERSATION)
@@ -43,17 +43,19 @@ public class DirectMessageController {
 
     @PostMapping(CREATE_MESSAGE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createMessage(@RequestBody DirectMessageRequestDto dto){
-         return directMessageService.createMessage(dto);
+    public Long createMessage(@RequestBody DirectMessageRequestDto dto, @AuthenticationPrincipal ExtendedUserDetails ud){
+         return directMessageService.createMessage(ud.getId(),dto);
     }
 
     @PutMapping(UPDATE_MESSAGE)
-    public void updateMessage(@PathVariable Long messageId, @RequestBody String value) {
-        directMessageService.updateMessage(messageId, value);
+    public void updateMessage(@PathVariable Long messageId,
+                              @RequestBody String value,
+                              @AuthenticationPrincipal ExtendedUserDetails ud) {
+        directMessageService.updateMessage(ud.getId(), messageId, value);
     }
 
     @DeleteMapping(DELETE_MESSAGE)
-    public void deleteMessage(@PathVariable Long messageId) {
-        directMessageService.deleteMessage(messageId);
+    public void deleteMessage(@PathVariable Long messageId, @AuthenticationPrincipal ExtendedUserDetails ud) {
+        directMessageService.deleteMessage(ud.getId(), messageId);
     }
 }
