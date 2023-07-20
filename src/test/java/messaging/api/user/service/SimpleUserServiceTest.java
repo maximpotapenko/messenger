@@ -1,4 +1,4 @@
-package messaging.api.user;
+package messaging.api.user.service;
 
 import messaging.api.user.entity.User;
 import messaging.api.user.dto.RegistrationRequestDto;

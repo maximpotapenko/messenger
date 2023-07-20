@@ -1,4 +1,4 @@
-package messaging.api.user;
+package messaging.api.user.repository;
 
 import messaging.api.user.entity.User;
 import messaging.api.user.repository.UserRepository;
