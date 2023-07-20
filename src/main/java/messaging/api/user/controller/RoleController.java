@@ -23,12 +23,10 @@ public class RoleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<RoleResponseDto> createRole(@RequestBody RoleRequestDto dto) {
+    public Long createRole(@RequestBody RoleRequestDto dto) {
         log.info("Received request to create new role {}", dto);
 
-        RoleResponseDto payload = roleService.createRole(dto);
-
-        return new ResponseEntity<>(payload, HttpStatusCode.valueOf(200));
+        return roleService.createRole(dto);
     }
 
     @GetMapping("/{name}")

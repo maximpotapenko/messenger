@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RoleService {
 
-    RoleResponseDto createRole(RoleRequestDto dto);
+    Long createRole(RoleRequestDto dto);
 
     RoleResponseDto findRoleByName(String name);
 

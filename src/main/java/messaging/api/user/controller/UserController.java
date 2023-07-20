@@ -10,6 +10,7 @@ import messaging.api.util.exception.ResourceNotFoundException;
 import messaging.api.util.exception.UsernameAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,10 +57,10 @@ public class UserController {
     }
 
     @PostMapping(CREATE_USER)
-    public ResponseEntity<Object> createUser(@RequestBody RegistrationRequestDto requestDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long createUser(@RequestBody RegistrationRequestDto requestDto) {
         try {
-            userService.createUser(requestDto);
-            return new ResponseEntity<>(HttpStatusCode.valueOf(201));
+            return userService.createUser(requestDto);
         } catch(UsernameAlreadyExistsException e) {
             log.info(e.getMessage());
             throw e;

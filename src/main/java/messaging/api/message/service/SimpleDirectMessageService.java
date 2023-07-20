@@ -24,10 +24,12 @@ public class SimpleDirectMessageService implements DirectMessageService{
     private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Message doesn't exist";
 
     @Override
-    public void createMessage(DirectMessageRequestDto dto) {
+    public Long createMessage(DirectMessageRequestDto dto) {
         DirectMessage message = directMessageMapper.toEntity(dto);
 
         directMessageRepository.saveAndFlush(message);
+
+        return message.getId();
     }
 
     @Override

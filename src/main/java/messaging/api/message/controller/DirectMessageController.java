@@ -43,8 +43,8 @@ public class DirectMessageController {
 
     @PostMapping(CREATE_MESSAGE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createMessage(@RequestBody DirectMessageRequestDto dto){
-        directMessageService.createMessage(dto);
+    public Long createMessage(@RequestBody DirectMessageRequestDto dto){
+         return directMessageService.createMessage(dto);
     }
 
     @PutMapping(UPDATE_MESSAGE)

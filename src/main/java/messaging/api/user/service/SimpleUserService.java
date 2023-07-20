@@ -34,7 +34,7 @@ public class SimpleUserService implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public void createUser(RegistrationRequestDto registrationRequestDto) {
+    public Long createUser(RegistrationRequestDto registrationRequestDto) {
         User user = userMapper.toEntity(registrationRequestDto);
 
         if(userRepository.existsUserEntityByUsername(user.getUsername()))
@@ -43,6 +43,8 @@ public class SimpleUserService implements UserService {
         userRepository.saveAndFlush(user);
 
         log.info("{} added to the database", user);
+
+        return user.getId();
     }
 
     @Override

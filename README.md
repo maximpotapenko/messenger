@@ -1,1 +1,3 @@
-# messaging-api
+# Messenger
+
+simple application for fun

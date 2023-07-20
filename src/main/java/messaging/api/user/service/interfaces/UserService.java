@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void createUser(RegistrationRequestDto registrationRequestDto);
+    Long createUser(RegistrationRequestDto registrationRequestDto);
 
     ProfileResponseDto findUser(Long id);
 

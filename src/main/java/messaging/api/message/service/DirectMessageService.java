@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DirectMessageService {
 
-    void createMessage(DirectMessageRequestDto dto);
+    Long createMessage(DirectMessageRequestDto dto);
 
     DirectMessageResponseDto findDirectMessage(Long id);
 

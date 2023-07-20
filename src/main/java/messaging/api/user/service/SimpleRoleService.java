@@ -24,7 +24,7 @@ public class SimpleRoleService implements RoleService {
     private final RoleMapper roleMapper;
 
     @Override
-    public RoleResponseDto createRole(RoleRequestDto dto) {
+    public Long createRole(RoleRequestDto dto) {
         Role r = roleMapper.toEntity(dto);
 
         if(roleRepository.existsRoleByName(dto.getName())) throw new ResourceAlreadyExistsException("Role already exists");
@@ -33,7 +33,7 @@ public class SimpleRoleService implements RoleService {
 
         log.info("Added new role {} to database ", r);
 
-        return roleMapper.toDto(r);
+        return r.getId();
     }
 
     @Override
