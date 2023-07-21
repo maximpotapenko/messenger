@@ -4,6 +4,7 @@ import messenger.message.config.MessageTestConfig;
 import messenger.message.dto.DirectMessageListResponseDto;
 import messenger.message.dto.DirectMessageRequestDto;
 import messenger.message.dto.DirectMessageResponseDto;
+import messenger.message.dto.UpdateMessageRequestDto;
 import messenger.message.entity.DirectMessage;
 import messenger.message.factory.DirectMessageTestFactory;
 import messenger.message.repository.DirectMessageRepository;
@@ -144,19 +145,24 @@ class DirectMessageControllerIT {
     void updateMessage() {
         //given
         DirectMessage message = messageFactory.getDirectMessage(author.getId(), recipient.getId());
+
         directMessageRepository.saveAndFlush(message);
+
         Long messageId = message.getId();
+
+        UpdateMessageRequestDto dto = new UpdateMessageRequestDto("updated message");
+
         //when //then
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder.path(DirectMessageController.UPDATE_MESSAGE).build(messageId))
                 .header(HttpHeaders.AUTHORIZATION, auth)
-                .body(BodyInserters.fromValue("updated message"))
+                .body(BodyInserters.fromValue(dto))
                 .exchange()
                 .expectStatus().isOk();
 
         DirectMessage updatedMessage = directMessageRepository.findById(messageId).orElseThrow();
 
-        assertEquals("updated message", updatedMessage.getMessage());
+        assertEquals(dto.getMessage(), updatedMessage.getMessage());
     }
 
     @Test

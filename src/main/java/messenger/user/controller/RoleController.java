@@ -1,5 +1,6 @@
 package messenger.user.controller;
 
+import jakarta.validation.Valid;
 import messenger.user.dto.RoleRequestDto;
 import messenger.user.dto.RoleResponseDto;
 import messenger.user.service.interfaces.RoleService;
@@ -22,7 +23,7 @@ public class RoleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Long createRole(@RequestBody RoleRequestDto dto) {
+    public Long createRole(@RequestBody @Valid RoleRequestDto dto) {
         log.info("Received request to create new role {}", dto);
 
         return roleService.createRole(dto);

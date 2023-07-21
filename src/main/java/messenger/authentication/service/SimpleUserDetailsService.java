@@ -3,7 +3,7 @@ package messenger.authentication.service;
 import messenger.authentication.UserDetailsImpl;
 import messenger.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import messenger.util.exception.ResourceNotFoundException;
+import messenger.exception.ResourceNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;

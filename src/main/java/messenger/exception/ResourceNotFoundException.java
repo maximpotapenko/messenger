@@ -1,4 +1,4 @@
-package messenger.util.exception;
+package messenger.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

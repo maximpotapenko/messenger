@@ -1,8 +1,10 @@
 package messenger.message.controller;
 
+import jakarta.validation.Valid;
 import messenger.message.dto.DirectMessageListResponseDto;
 import messenger.message.dto.DirectMessageRequestDto;
 import messenger.message.dto.DirectMessageResponseDto;
+import messenger.message.dto.UpdateMessageRequestDto;
 import messenger.message.service.DirectMessageService;
 import messenger.authentication.ExtendedUserDetails;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,8 @@ public class DirectMessageController {
     public static final String DELETE_MESSAGE = BASE_REQUEST + "/{messageId}";
 
     @GetMapping(FIND_MESSAGE)
-    public DirectMessageResponseDto findMessage(@PathVariable Long messageId, @AuthenticationPrincipal ExtendedUserDetails ud) {
+    public DirectMessageResponseDto findMessage(@PathVariable Long messageId,
+                                                @AuthenticationPrincipal ExtendedUserDetails ud) {
         return directMessageService.findDirectMessage(ud.getId(), messageId);
     }
 
@@ -39,19 +42,21 @@ public class DirectMessageController {
 
     @PostMapping(CREATE_MESSAGE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createMessage(@RequestBody DirectMessageRequestDto dto, @AuthenticationPrincipal ExtendedUserDetails ud){
+    public Long createMessage(@RequestBody @Valid DirectMessageRequestDto dto,
+                              @AuthenticationPrincipal ExtendedUserDetails ud){
          return directMessageService.createMessage(ud.getId(),dto);
     }
 
     @PutMapping(UPDATE_MESSAGE)
     public void updateMessage(@PathVariable Long messageId,
-                              @RequestBody String value,
+                              @RequestBody @Valid UpdateMessageRequestDto dto,
                               @AuthenticationPrincipal ExtendedUserDetails ud) {
-        directMessageService.updateMessage(ud.getId(), messageId, value);
+        directMessageService.updateMessage(ud.getId(), messageId, dto.getMessage());
     }
 
     @DeleteMapping(DELETE_MESSAGE)
-    public void deleteMessage(@PathVariable Long messageId, @AuthenticationPrincipal ExtendedUserDetails ud) {
+    public void deleteMessage(@PathVariable Long messageId,
+                              @AuthenticationPrincipal ExtendedUserDetails ud) {
         directMessageService.deleteMessage(ud.getId(), messageId);
     }
 }

@@ -1,13 +1,14 @@
 package messenger.user.controller;
 
+import jakarta.validation.Valid;
 import messenger.user.dto.ProfileListResponseDto;
 import messenger.user.dto.RegistrationRequestDto;
 import messenger.user.dto.UpdateUserRequestDto;
 import messenger.user.dto.ProfileResponseDto;
 import messenger.authentication.ExtendedUserDetails;
 import messenger.user.service.interfaces.UserService;
-import messenger.util.exception.ResourceNotFoundException;
-import messenger.util.exception.UsernameAlreadyExistsException;
+import messenger.exception.ResourceNotFoundException;
+import messenger.exception.UsernameAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,7 @@ public class UserController {
 
     @PostMapping(CREATE_USER)
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createUser(@RequestBody RegistrationRequestDto requestDto) {
+    public Long createUser(@RequestBody @Valid RegistrationRequestDto requestDto) {
         try {
             return userService.createUser(requestDto);
         } catch(UsernameAlreadyExistsException e) {
@@ -67,18 +68,21 @@ public class UserController {
 
     @PostMapping(ADD_ROLE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void addRole(@PathVariable Long id, @RequestParam String name) {
+    public void addRole(@PathVariable Long id,
+                        @RequestParam String name) {
         userService.addRole(id, name);
     }
 
     @DeleteMapping(REMOVE_ROLE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteRole(@PathVariable Long id, @RequestParam String name) {
+    public void deleteRole(@PathVariable Long id,
+                           @RequestParam String name) {
         userService.removeRole(id, name);
     }
 
     @PutMapping(UPDATE_ACCOUNT)
-    public void updateUser(@RequestBody UpdateUserRequestDto requestDto, @AuthenticationPrincipal ExtendedUserDetails userDetails) {
+    public void updateUser(@RequestBody @Valid UpdateUserRequestDto requestDto
+            , @AuthenticationPrincipal ExtendedUserDetails userDetails) {
         userService.updateUser(userDetails.getId(), requestDto);
     }
 
