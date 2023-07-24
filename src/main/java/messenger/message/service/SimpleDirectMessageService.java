@@ -1,5 +1,6 @@
 package messenger.message.service;
 
+import jakarta.transaction.Transactional;
 import messenger.message.dto.DirectMessageListResponseDto;
 import messenger.message.entity.DirectMessage;
 import messenger.message.dto.DirectMessageRequestDto;
@@ -10,6 +11,9 @@ import messenger.exception.NotYourResourceException;
 import messenger.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import messenger.user.entity.User;
+import messenger.websocket.config.WebSocketConfig;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,17 +27,27 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     private final DirectMessageMapper directMessageMapper;
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
     private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Message doesn't exist";
 
     private static final String ACCESS_VIOLATION_EXCEPTION_MESSAGE = "This message does not belong to you";
 
     @Override
+    @Transactional
     public Long createMessage(Long requesterId, DirectMessageRequestDto dto) {
+
         DirectMessage message = directMessageMapper.toEntity(dto);
 
-        message.setId(requesterId);
+        message.setAuthor(new User());
+
+        message.getAuthor().setId(requesterId);
 
         directMessageRepository.saveAndFlush(message);
+
+        DirectMessageResponseDto payload = directMessageMapper.toDto(message);
+
+        simpMessagingTemplate.convertAndSendToUser(dto.getRecipientId().toString(), WebSocketConfig.DIRECT_MESSAGE_SEND_PATH, payload);
 
         return message.getId();
     }
