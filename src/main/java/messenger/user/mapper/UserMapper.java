@@ -7,20 +7,22 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+public abstract class UserMapper {
 
-    @Mapping(target ="password", source ="password", qualifiedByName = "encoder")
-    User toEntity(RegistrationRequestDto dto);
+    @Autowired
+    private PasswordEncoder encoder;
 
-    ProfileResponseDto toProfileResponseDto(User user);
+    @Mapping(target ="password", source ="password", qualifiedByName = "encodePassword")
+    public abstract User toEntity(RegistrationRequestDto dto);
 
-    @Named("encoder")
-    default String encoder(String password) {
-        return new BCryptPasswordEncoder().encode(password);
+    public abstract ProfileResponseDto toProfileResponseDto(User user);
+
+    @Named("encodePassword")
+    protected String encodePassword(String password) {
+        return encoder.encode(password);
     }
 }

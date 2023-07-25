@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -43,13 +44,16 @@ class UserControllerIT {
     @Autowired
     UserTestFactory userTestFactory;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     String auth = "Basic " + Base64.toBase64String("admin:password".getBytes(StandardCharsets.UTF_8));
 
     @BeforeEach
     void setup() {
         User admin = User.builder()
                 .username("admin")
-                .password(new BCryptPasswordEncoder().encode("password"))
+                .password(encoder.encode("password"))
                 .firstName("John")
                 .lastName("Doe")
                 .email("email@hotmail.com")

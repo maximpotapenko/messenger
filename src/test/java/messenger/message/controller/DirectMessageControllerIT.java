@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -43,13 +44,15 @@ class DirectMessageControllerIT {
     @Autowired
     DirectMessageTestFactory messageFactory;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     User author;
     User recipient;
     String auth;
 
     @BeforeEach
     void setupAll() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         author = User.builder()
                 .username("author")
