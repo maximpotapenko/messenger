@@ -1,17 +1,17 @@
 package messenger.user.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import messenger.user.constraint.ValidRoleName;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoleRequestDto {
+public class PasswordRequestDto {
 
-    @ValidRoleName
-    private String name;
+    @NotNull(message = "Password cannot be null")
+    private String password;
 }

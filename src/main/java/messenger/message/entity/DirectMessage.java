@@ -28,8 +28,9 @@ public class DirectMessage {
     @JoinColumn
     private User recipient;
 
+    @Builder.Default
+    private Instant createdAt = Instant.now();
+
     @Size(max = 500)
     private String message;
-
-    private Instant createdAt = Instant.now();
 }

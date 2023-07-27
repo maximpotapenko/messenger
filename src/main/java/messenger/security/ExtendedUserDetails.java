@@ -1,4 +1,4 @@
-package messenger.authentication;
+package messenger.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

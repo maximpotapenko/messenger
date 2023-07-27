@@ -1,10 +1,7 @@
 package messenger.user.controller;
 
 import messenger.user.config.UserTestConfig;
-import messenger.user.dto.ProfileListResponseDto;
-import messenger.user.dto.ProfileResponseDto;
-import messenger.user.dto.RegistrationRequestDto;
-import messenger.user.dto.UpdateUserRequestDto;
+import messenger.user.dto.*;
 import messenger.user.entity.Role;
 import messenger.user.entity.User;
 import messenger.user.repository.UserRepository;
@@ -19,14 +16,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -44,27 +38,18 @@ class UserControllerIT {
     @Autowired
     UserTestFactory userTestFactory;
 
-    @Autowired
-    PasswordEncoder encoder;
+    String auth = null;
 
-    String auth = "Basic " + Base64.toBase64String("admin:password".getBytes(StandardCharsets.UTF_8));
+    User admin = null;
 
     @BeforeEach
     void setup() {
-        User admin = User.builder()
-                .username("admin")
-                .password(encoder.encode("password"))
-                .firstName("John")
-                .lastName("Doe")
-                .email("email@hotmail.com")
-                .build();
+        admin = userTestFactory.getAdmin();
 
-        Role role = new Role();
-        role.setName("ROLE_ADMIN");
+        String username = admin.getUsername();
+        String password = userTestFactory.getRawPassword();
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(role);
-        admin.setRoles(roles);
+        auth = "Basic " + Base64.toBase64String((username + ":" + password).getBytes());
 
         repository.saveAndFlush(admin);
     }
@@ -145,6 +130,7 @@ class UserControllerIT {
     void createUser() {
         //given
         RegistrationRequestDto dto = userTestFactory.getRegistrationRequestDto();
+
         //when //then
             webTestClient.post()
                     .uri(uriBuilder -> uriBuilder.path(UserController.CREATE_USER).build())
@@ -164,8 +150,11 @@ class UserControllerIT {
     void addRole() {
         //given
         User user = userTestFactory.getUser();
+
         repository.saveAndFlush(user);
+
         Long id = user.getId();
+
         //when //then
         webTestClient.post()
                 .uri(uriBuilder -> uriBuilder.path(UserController.ADD_ROLE)
@@ -189,8 +178,8 @@ class UserControllerIT {
     @Test
     void deleteRole() {
         //given
-        User user = repository.findByUsername("admin").orElseThrow();
-        Long id = user.getId();
+        Long id = admin.getId();
+
         //when //then
         webTestClient.delete()
                 .uri(uriBuilder -> uriBuilder.path(UserController.REMOVE_ROLE)
@@ -200,9 +189,9 @@ class UserControllerIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        user = repository.findById(id).orElseThrow();
+        User updatedUser = repository.findById(id).orElseThrow();
 
-        Role role = user.getRoles().stream()
+        Role role = updatedUser.getRoles().stream()
                 .filter(r -> r.getName().equals("ROLE_ADMIN"))
                 .findFirst()
                 .orElse(null);
@@ -218,7 +207,9 @@ class UserControllerIT {
                 .lastName("Last")
                 .email("newmail@gmail.com")
                 .build();
-        Long id = repository.findByUsername("admin").orElseThrow().getId();
+
+        Long id = admin.getId();
+
         //when //then
         webTestClient.put()
                 .uri(uriBuilder -> uriBuilder.path(UserController.UPDATE_ACCOUNT)
@@ -228,10 +219,10 @@ class UserControllerIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        User user = repository.findById(id).orElseThrow();
-        assertEquals(request.getFirstName(), user.getFirstName());
-        assertEquals(request.getLastName(), user.getLastName());
-        assertEquals(request.getEmail(), user.getEmail());
+        User updatedUser = repository.findById(id).orElseThrow();
+        assertEquals(request.getFirstName(), updatedUser.getFirstName());
+        assertEquals(request.getLastName(), updatedUser.getLastName());
+        assertEquals(request.getEmail(), updatedUser.getEmail());
     }
 
     @Test
@@ -279,7 +270,7 @@ class UserControllerIT {
         User user = userTestFactory.getUser();
 
         String username = user.getUsername();
-        String password = "password";
+        String password = userTestFactory.getRawPassword();
 
         user.setDeleted(true);
 
@@ -305,21 +296,24 @@ class UserControllerIT {
         User user = userTestFactory.getUser();
 
         String username = user.getUsername();
-        String password = "password";
+        String password = userTestFactory.getRawPassword();
 
         repository.saveAndFlush(user);
 
         String auth = "Basic " + Base64.toBase64String((username + ":" + password).getBytes());
 
         Long id = user.getId();
+
         //when //then
-        webTestClient.delete()
+        webTestClient.method(HttpMethod.DELETE)
                 .uri(uriBuilder -> uriBuilder.path(UserController.DELETE_ACCOUNT).build())
                 .header(HttpHeaders.AUTHORIZATION, auth)
+                .body(BodyInserters.fromValue(new PasswordRequestDto(password)))
                 .exchange()
                 .expectStatus().isOk();
 
         user = repository.findById(id).orElseThrow();
+
         assertTrue(user.isDeleted());
     }
 }

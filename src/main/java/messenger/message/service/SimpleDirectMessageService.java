@@ -31,7 +31,7 @@ public class SimpleDirectMessageService implements DirectMessageService{
 
     private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Message doesn't exist";
 
-    private static final String ACCESS_VIOLATION_EXCEPTION_MESSAGE = "This message does not belong to you";
+    private static final String ACCESS_VIOLATION_EXCEPTION_MESSAGE = "Message doesn't belong to you";
 
     @Override
     @Transactional

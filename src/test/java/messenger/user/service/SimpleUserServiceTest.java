@@ -4,8 +4,6 @@ import messenger.user.entity.User;
 import messenger.user.dto.RegistrationRequestDto;
 import messenger.user.mapper.UserMapper;
 import messenger.user.repository.UserRepository;
-import messenger.user.service.interfaces.RoleService;
-import messenger.user.service.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

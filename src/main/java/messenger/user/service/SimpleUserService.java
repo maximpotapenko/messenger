@@ -8,8 +8,6 @@ import messenger.user.dto.ProfileResponseDto;
 import messenger.user.dto.RegistrationRequestDto;
 import messenger.user.dto.UpdateUserRequestDto;
 import messenger.user.repository.UserRepository;
-import messenger.user.service.interfaces.RoleService;
-import messenger.user.service.interfaces.UserService;
 import messenger.exception.ResourceAlreadyExistsException;
 import messenger.exception.ResourceNotFoundException;
 import messenger.exception.UsernameAlreadyExistsException;
@@ -56,14 +54,6 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public ProfileResponseDto findUser(String username) {
-        return userRepository
-                .findByUsername(username)
-                .map(userMapper::toProfileResponseDto)
-                .orElseThrow(() -> new ResourceNotFoundException(username));
-    }
-
-    @Override
     public ProfileListResponseDto findUsersByUsername(String username, int offset, int limit) {
         if(limit > 50) throw new IllegalArgumentException("limit cannot be greater than 50");
 
@@ -99,6 +89,7 @@ public class SimpleUserService implements UserService {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(userId));
+
         String oldUsername = user.getUsername();
 
         user.setUsername(newUsername);
@@ -158,10 +149,13 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id, String password) {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        if(!passwordEncoder.matches(password, user.getPassword()))
+            throw new WrongPasswordException("Wrong password");
 
         user.setDeleted(true);
 

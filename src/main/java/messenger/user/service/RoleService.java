@@ -1,4 +1,4 @@
-package messenger.user.service.interfaces;
+package messenger.user.service;
 
 import messenger.user.entity.Role;
 import messenger.user.dto.RoleRequestDto;

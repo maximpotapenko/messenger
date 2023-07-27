@@ -1,4 +1,4 @@
-package messenger.authentication;
+package messenger.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package messenger.user.service.interfaces;
+package messenger.user.service;
 
 import messenger.user.dto.ProfileListResponseDto;
 import messenger.user.dto.ProfileResponseDto;
@@ -10,8 +10,6 @@ public interface UserService {
     Long createUser(RegistrationRequestDto registrationRequestDto);
 
     ProfileResponseDto findUser(Long id);
-
-    ProfileResponseDto findUser(String username);
 
     ProfileListResponseDto findUsersByUsername(String username, int offset, int limit);
 
@@ -25,7 +23,7 @@ public interface UserService {
 
     void removeRole(Long userId, String role);
 
-    void deleteUser(Long id);
+    void deleteUser(Long id, String password);
 
     void restoreUser(Long id);
 

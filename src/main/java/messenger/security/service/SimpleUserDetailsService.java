@@ -1,6 +1,6 @@
-package messenger.authentication.service;
+package messenger.security.service;
 
-import messenger.authentication.UserDetailsImpl;
+import messenger.security.UserDetailsImpl;
 import messenger.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import messenger.exception.ResourceNotFoundException;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,16 +38,17 @@ class UserRepositoryTest {
             List<User> users = List.of(user1,user3,user4,user2);
 
             List<String> expected = List.of("user", "user1", "user11", "user333");
+
+            String search = "user";
+
             //when
             userRepository.saveAll(users);
 
-            List<User> queryResult = userRepository.findClosestUsersByUsernameLike("user", 0, 4);
+            List<String> result = userRepository.findClosestUsersByUsernameLike(search, 0, 4)
+                    .stream()
+                    .map(User::getUsername)
+                    .toList();
 
-            List<String> result = new ArrayList<>();
-
-            for(User i : queryResult) {
-                result.add(i.getUsername());
-            }
             //then
             assertIterableEquals(expected, result);
         }
@@ -58,8 +58,10 @@ class UserRepositoryTest {
             //given
             List<User> expected = Collections.emptyList();
 
+            String search = "user";
+
             //when
-            List<User> result = userRepository.findClosestUsersByUsernameLike("user", 0, 4);
+            List<User> result = userRepository.findClosestUsersByUsernameLike(search, 0, 4);
 
             //then
             assertIterableEquals(expected, result);
@@ -75,10 +77,13 @@ class UserRepositoryTest {
 
             List<User> users = List.of(user1, user2, user3, user4);
 
+            String search = "user";
+
             //when
             userRepository.saveAll(users);
 
-            List<User> result = userRepository.findClosestUsersByUsernameLike("user", 1,2);
+            List<User> result = userRepository.findClosestUsersByUsernameLike(search, 1,2);
+
             //then
             assertEquals(2,result.size());
         }

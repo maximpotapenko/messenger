@@ -1,12 +1,9 @@
 package messenger.user.controller;
 
 import jakarta.validation.Valid;
-import messenger.user.dto.ProfileListResponseDto;
-import messenger.user.dto.RegistrationRequestDto;
-import messenger.user.dto.UpdateUserRequestDto;
-import messenger.user.dto.ProfileResponseDto;
-import messenger.authentication.ExtendedUserDetails;
-import messenger.user.service.interfaces.UserService;
+import messenger.user.dto.*;
+import messenger.security.ExtendedUserDetails;
+import messenger.user.service.UserService;
 import messenger.exception.ResourceNotFoundException;
 import messenger.exception.UsernameAlreadyExistsException;
 import lombok.AllArgsConstructor;
@@ -67,33 +64,33 @@ public class UserController {
     }
 
     @PostMapping(ADD_ROLE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void addRole(@PathVariable Long id,
                         @RequestParam String name) {
         userService.addRole(id, name);
     }
 
     @DeleteMapping(REMOVE_ROLE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteRole(@PathVariable Long id,
                            @RequestParam String name) {
         userService.removeRole(id, name);
     }
 
     @PutMapping(UPDATE_ACCOUNT)
-    public void updateUser(@RequestBody @Valid UpdateUserRequestDto requestDto
-            , @AuthenticationPrincipal ExtendedUserDetails userDetails) {
+    public void updateUser(@RequestBody @Valid UpdateUserRequestDto requestDto,
+                           @AuthenticationPrincipal ExtendedUserDetails userDetails) {
         userService.updateUser(userDetails.getId(), requestDto);
     }
 
     @PutMapping(BAN_USER)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void banUser(@PathVariable Long id) {
         userService.banUser(id);
     }
 
     @PutMapping(UNBAN_USER)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void unbanUser(@PathVariable Long id) {
         userService.unbanUser(id);
     }
@@ -105,7 +102,8 @@ public class UserController {
     }
 
     @DeleteMapping(DELETE_ACCOUNT)
-    public void deleteAccount(@AuthenticationPrincipal ExtendedUserDetails userDetails) {
-        userService.deleteUser(userDetails.getId());
+    public void deleteAccount(@AuthenticationPrincipal ExtendedUserDetails userDetails,
+                              @RequestBody @Valid PasswordRequestDto dto) {
+        userService.deleteUser(userDetails.getId(), dto.getPassword());
     }
 }

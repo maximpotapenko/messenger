@@ -9,7 +9,6 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -43,8 +42,6 @@ public class User implements Serializable {
     @Size(min = 2, max = 32)
     private String lastName;
 
-    private LocalDate birthday;
-
     @NotNull
     @Email
     @Column(nullable = false)
@@ -53,6 +50,7 @@ public class User implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
+    @Builder.Default
     private Instant createdAt = Instant.now();
 
     private boolean deleted = false;

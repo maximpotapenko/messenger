@@ -24,7 +24,7 @@ public class ExceptionHandlers {
 
         List<ViolationResponseDto> violations = errors.stream()
                 .map(error -> ViolationResponseDto.builder()
-                        .rejectedValue(error.getRejectedValue().toString())
+                        .rejectedValue((String) error.getRejectedValue())
                         .message(error.getDefaultMessage())
                         .fieldName(error.getField())
                         .build())

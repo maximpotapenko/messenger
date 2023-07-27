@@ -3,7 +3,7 @@ package messenger.user.controller;
 import jakarta.validation.Valid;
 import messenger.user.dto.RoleRequestDto;
 import messenger.user.dto.RoleResponseDto;
-import messenger.user.service.interfaces.RoleService;
+import messenger.user.service.RoleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RequestMapping("v1/roles")
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
     private final RoleService roleService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Long createRole(@RequestBody @Valid RoleRequestDto dto) {
         log.info("Received request to create new role {}", dto);
 
@@ -30,13 +30,11 @@ public class RoleController {
     }
 
     @GetMapping("/{name}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public RoleResponseDto findRoleByName(@PathVariable String name) {
         return roleService.findRoleByName(name);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<RoleResponseDto>> findAllRoles() {
         List<RoleResponseDto> payload = roleService.findAllRoles();
 
@@ -44,7 +42,6 @@ public class RoleController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteRoleByName(@RequestParam String name) {
         log.info("Received request to delete role " + name);
 

@@ -9,6 +9,7 @@ import messenger.message.entity.DirectMessage;
 import messenger.message.factory.DirectMessageTestFactory;
 import messenger.message.repository.DirectMessageRepository;
 import messenger.user.entity.User;
+import messenger.user.factory.UserTestFactory;
 import messenger.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +21,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
@@ -45,7 +44,7 @@ class DirectMessageControllerIT {
     DirectMessageTestFactory messageFactory;
 
     @Autowired
-    PasswordEncoder encoder;
+    UserTestFactory userTestFactory;
 
     User author;
     User recipient;
@@ -53,24 +52,14 @@ class DirectMessageControllerIT {
 
     @BeforeEach
     void setupAll() {
+        author = userTestFactory.getUser();
 
-        author = User.builder()
-                .username("author")
-                .password(encoder.encode("password"))
-                .firstName("John")
-                .lastName("Doe")
-                .email("email@hotmail.com")
-                .build();
+        recipient = userTestFactory.getUser();
 
-        recipient = User.builder()
-                .username("recipient")
-                .password(encoder.encode("password"))
-                .firstName("John")
-                .lastName("Doe")
-                .email("email@hotmail.com")
-                .build();
+        String username = author.getUsername();
+        String password = userTestFactory.getRawPassword();
 
-        auth = "Basic " + Base64.toBase64String((author.getUsername() + ":password").getBytes());
+        auth = "Basic " + Base64.toBase64String((username + ":" + password).getBytes());
 
         userRepository.saveAllAndFlush(List.of(author, recipient));
     }
@@ -185,6 +174,6 @@ class DirectMessageControllerIT {
 
         Optional<DirectMessage> optional = directMessageRepository.findById(messageId);
 
-        assertThrows(RuntimeException.class, () -> optional.orElseThrow());
+        assertThrows(RuntimeException.class, optional::orElseThrow);
     }
 }

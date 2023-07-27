@@ -4,7 +4,6 @@ import messenger.user.dto.RoleRequestDto;
 import messenger.user.dto.RoleResponseDto;
 import messenger.user.mapper.RoleMapper;
 import messenger.user.repository.RoleRepository;
-import messenger.user.service.interfaces.RoleService;
 import messenger.user.entity.Role;
 import messenger.exception.ResourceAlreadyExistsException;
 import messenger.exception.ResourceNotFoundException;

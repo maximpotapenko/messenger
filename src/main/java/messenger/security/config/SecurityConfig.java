@@ -1,8 +1,11 @@
-package messenger.authentication.config;
+package messenger.security.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
@@ -25,13 +29,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
                         authorize
-                            .requestMatchers("/v1/users").permitAll()
-                            .requestMatchers("/error").permitAll()
-                            .anyRequest().authenticated()
+                                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                                .requestMatchers(HttpMethod.POST,"/v1/users").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .userDetailsService(userDetailsService)
                 .httpBasic(Customizer.withDefaults());
+
         return http.build();
     }
 
