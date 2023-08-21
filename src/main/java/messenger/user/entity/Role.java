@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import messenger.common.component.logging.LoggerEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(LoggerEntityListener.class)
 public class Role implements Serializable {
     @Serial
     private static final long serialVersionUID = 8997690331725029733L;

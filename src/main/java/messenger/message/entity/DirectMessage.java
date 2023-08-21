@@ -3,6 +3,7 @@ package messenger.message.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import messenger.common.component.logging.LoggerEntityListener;
 import messenger.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(LoggerEntityListener.class)
 public class DirectMessage {
     @Id
     @GeneratedValue
