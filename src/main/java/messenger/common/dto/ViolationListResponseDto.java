@@ -1,4 +1,4 @@
-package messenger.exception.dto;
+package messenger.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class ViolationListResponseDto {
 
-    private final Instant timestamp = Instant.now();
+    private final String timestamp = Instant.now().toString();
 
     private int status;
 

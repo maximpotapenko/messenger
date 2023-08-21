@@ -7,12 +7,12 @@ import messenger.message.dto.DirectMessageRequestDto;
 import messenger.message.dto.DirectMessageResponseDto;
 import messenger.message.mapper.DirectMessageMapper;
 import messenger.message.repository.DirectMessageRepository;
-import messenger.exception.NotYourResourceException;
-import messenger.exception.ResourceNotFoundException;
+import messenger.common.exception.NotYourResourceException;
+import messenger.common.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import messenger.user.entity.User;
-import messenger.websocket.config.WebSocketConfig;
+import messenger.common.config.WebSocketConfig;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 

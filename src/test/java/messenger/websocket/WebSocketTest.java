@@ -6,7 +6,7 @@ import messenger.message.dto.DirectMessageResponseDto;
 import messenger.message.repository.DirectMessageRepository;
 import messenger.user.entity.User;
 import messenger.user.repository.UserRepository;
-import messenger.websocket.config.WebSocketConfig;
+import messenger.common.config.WebSocketConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package messenger.websocket.principal;
+package messenger.common.component.websocket;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

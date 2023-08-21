@@ -8,10 +8,10 @@ import messenger.user.dto.ProfileResponseDto;
 import messenger.user.dto.RegistrationRequestDto;
 import messenger.user.dto.UpdateUserRequestDto;
 import messenger.user.repository.UserRepository;
-import messenger.exception.ResourceAlreadyExistsException;
-import messenger.exception.ResourceNotFoundException;
-import messenger.exception.UsernameAlreadyExistsException;
-import messenger.exception.WrongPasswordException;
+import messenger.common.exception.ResourceAlreadyExistsException;
+import messenger.common.exception.ResourceNotFoundException;
+import messenger.common.exception.UsernameAlreadyExistsException;
+import messenger.common.exception.WrongPasswordException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +40,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("{} added to the database", user);
+        log.info("User {} added to database", user.getId());
 
         return user.getId();
     }
@@ -78,7 +78,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("{} username changed from " + oldPassword + " to " + newPassword, user);
+        log.info("User {} changed password", userId);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("{} username changed from " + oldUsername + " to " + user.getUsername(), user);
+        log.info("User {} changed username from {} to {}", userId, oldUsername, newUsername);
     }
 
     @Override
@@ -113,6 +113,8 @@ public class SimpleUserService implements UserService {
             user.setEmail(updateUserRequestDto.getEmail());
 
         userRepository.saveAndFlush(user);
+
+        log.info("User {} updated info", userId);
     }
 
     @Override
@@ -131,7 +133,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("Added role " + r.getName() + " to user with id: " + user.getId());
+        log.info("Added role {} to User {}", role, userId);
     }
 
     @Override
@@ -145,7 +147,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("Removed role " + r.getName() + " from user with id: " + user.getId());
+        log.info("Removed role {} from User {}", role, userId);
     }
 
     @Override
@@ -161,7 +163,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("{} has been marked as deleted", user);
+        log.info("User {} has been marked as deleted", id);
     }
 
     @Override
@@ -174,7 +176,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("{} has been marked as NOT deleted", user);
+        log.info("User {} has been marked as NOT deleted", id);
     }
 
     @Override
@@ -187,7 +189,7 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("Banned {}", user);
+        log.info("User {} has been banned", id);
     }
 
     @Override
@@ -200,6 +202,6 @@ public class SimpleUserService implements UserService {
 
         userRepository.saveAndFlush(user);
 
-        log.info("Unbanned {}", user);
+        log.info("User {} has been unbanned", id);
     }
 }

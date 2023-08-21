@@ -2,15 +2,11 @@ package messenger.user.controller;
 
 import jakarta.validation.Valid;
 import messenger.user.dto.*;
-import messenger.security.ExtendedUserDetails;
+import messenger.common.component.security.ExtendedUserDetails;
 import messenger.user.service.UserService;
-import messenger.exception.ResourceNotFoundException;
-import messenger.exception.UsernameAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +31,8 @@ public class UserController {
 
 
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<ProfileResponseDto> getUser(@PathVariable Long id) {
-        try {
-            ProfileResponseDto result = userService.findUser(id);
-            return new ResponseEntity<>(result, HttpStatusCode.valueOf(200));
-        } catch(ResourceNotFoundException e) {
-            log.info(e.getMessage());
-            throw e;
-        }
+    public ProfileResponseDto getUser(@PathVariable Long id) {
+        return userService.findUser(id);
     }
 
     @GetMapping(FIND_USERS_BY_USERNAME)
@@ -55,12 +45,7 @@ public class UserController {
     @PostMapping(CREATE_USER)
     @ResponseStatus(HttpStatus.CREATED)
     public Long createUser(@RequestBody @Valid RegistrationRequestDto requestDto) {
-        try {
-            return userService.createUser(requestDto);
-        } catch(UsernameAlreadyExistsException e) {
-            log.info(e.getMessage());
-            throw e;
-        }
+        return userService.createUser(requestDto);
     }
 
     @PostMapping(ADD_ROLE)

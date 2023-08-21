@@ -1,4 +1,4 @@
-package messenger.security;
+package messenger.common.component.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

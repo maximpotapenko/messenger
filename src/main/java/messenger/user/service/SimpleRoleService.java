@@ -5,8 +5,8 @@ import messenger.user.dto.RoleResponseDto;
 import messenger.user.mapper.RoleMapper;
 import messenger.user.repository.RoleRepository;
 import messenger.user.entity.Role;
-import messenger.exception.ResourceAlreadyExistsException;
-import messenger.exception.ResourceNotFoundException;
+import messenger.common.exception.ResourceAlreadyExistsException;
+import messenger.common.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SimpleRoleService implements RoleService {
 
         roleRepository.saveAndFlush(r);
 
-        log.info("Added new role {} to database ", r);
+        log.info("Role {} added to database ", r.getName());
 
         return r.getId();
     }
@@ -55,7 +55,7 @@ public class SimpleRoleService implements RoleService {
 
         roleRepository.delete(r);
 
-        log.info("Deleted role {} from database", r);
+        log.info("Role {} has been deleted", r.getName());
     }
 
     @Override

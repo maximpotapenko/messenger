@@ -1,6 +1,6 @@
-package messenger.websocket.config;
+package messenger.common.config;
 
-import messenger.websocket.handler.CustomHandshakeHandler;
+import messenger.common.component.websocket.CustomHandshakeHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;

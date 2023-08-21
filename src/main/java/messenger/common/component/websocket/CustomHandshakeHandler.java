@@ -1,7 +1,6 @@
-package messenger.websocket.handler;
+package messenger.common.component.websocket;
 
-import messenger.security.ExtendedUserDetails;
-import messenger.websocket.principal.StompPrincipal;
+import messenger.common.component.security.ExtendedUserDetails;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;

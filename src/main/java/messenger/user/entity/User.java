@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import messenger.common.component.logging.LoggerEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(LoggerEntityListener.class)
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 4141717765406401594L;

@@ -1,5 +1,6 @@
 package messenger.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import messenger.user.dto.RoleRequestDto;
 import messenger.user.dto.RoleResponseDto;
@@ -23,8 +24,8 @@ public class RoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createRole(@RequestBody @Valid RoleRequestDto dto) {
-        log.info("Received request to create new role {}", dto);
+    public Long createRole(@RequestBody @Valid RoleRequestDto dto, HttpServletRequest request) {
+        log.info("Received request to create new role");
 
         return roleService.createRole(dto);
     }
@@ -42,7 +43,7 @@ public class RoleController {
     }
 
     @DeleteMapping
-    public void deleteRoleByName(@RequestParam String name) {
+    public void deleteRoleByName(@RequestParam String name, HttpServletRequest request) {
         log.info("Received request to delete role " + name);
 
         roleService.deleteRoleByName(name);

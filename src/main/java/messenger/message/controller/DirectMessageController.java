@@ -6,7 +6,7 @@ import messenger.message.dto.DirectMessageRequestDto;
 import messenger.message.dto.DirectMessageResponseDto;
 import messenger.message.dto.UpdateMessageRequestDto;
 import messenger.message.service.DirectMessageService;
-import messenger.security.ExtendedUserDetails;
+import messenger.common.component.security.ExtendedUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

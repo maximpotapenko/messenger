@@ -1,7 +1,8 @@
-package messenger.exception.handler;
+package messenger.common.component.exception;
 
-import messenger.exception.dto.ViolationListResponseDto;
-import messenger.exception.dto.ViolationResponseDto;
+import lombok.extern.slf4j.Slf4j;
+import messenger.common.dto.ViolationListResponseDto;
+import messenger.common.dto.ViolationResponseDto;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,12 +14,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.List;
 
 @ControllerAdvice
+@Slf4j
 public class ExceptionHandlers {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ViolationListResponseDto> handle(MethodArgumentNotValidException e) {
 
         BindingResult br = e.getBindingResult();
+
+        log.info("[VALIDATION FAILED] FOR [{}]", br.getObjectName());
 
         List<FieldError> errors = br.getFieldErrors();
 

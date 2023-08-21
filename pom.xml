@@ -11,8 +11,8 @@
     <groupId>messenger</groupId>
     <artifactId>messenger</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>security</name>
-    <description>security</description>
+    <name>messenger</name>
+    <description>messenger</description>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>

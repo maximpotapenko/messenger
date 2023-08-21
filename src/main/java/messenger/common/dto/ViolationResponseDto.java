@@ -1,4 +1,4 @@
-package messenger.exception.dto;
+package messenger.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

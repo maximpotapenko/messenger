@@ -1,4 +1,4 @@
-package messenger.security;
+package messenger.common.component.security;
 
 import messenger.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailsImpl implements ExtendedUserDetails {
+public class CustomUserDetails implements ExtendedUserDetails {
     private User user;
 
     @Override
